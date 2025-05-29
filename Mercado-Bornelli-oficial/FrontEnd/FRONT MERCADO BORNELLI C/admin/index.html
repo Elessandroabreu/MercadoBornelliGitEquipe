@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo - Mercado Bornelli</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <!-- Carregar Chart.js com um fallback local -->
+  <script>
+    // Verificar se Chart.js foi carregado corretamente
+    window.addEventListener('load', function() {
+      if (typeof Chart === 'undefined') {
+        console.warn('Chart.js CDN não está disponível, tentando carregar versão local');
+        
+        // Criar um script para carregar a versão local ou alternativa
+        var script = document.createElement('script');
+        script.src = "../js/lib/chart.min.js"; // Se você tiver uma cópia local
+        // Ou tente um CDN alternativo:
+        // script.src = "https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js";
+        script.async = true;
+        script.onload = function() {
+          console.log('Chart.js carregado com sucesso pelo fallback');
+          // Recarregar os dados do dashboard após carregar Chart.js
+          if (typeof loadDashboardData === 'function') {
+            loadDashboardData(document.getElementById('period-filter').value);
+          }
+        };
+        document.head.appendChild(script);
+      }
+    });
+  </script>
+  
+  <!-- Carregando Chart.js do CDN principal -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+  <div class="admin-container">
+    <div id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <h2>Mercado Bornelli</h2>
+        <p>Painel Administrativo</p>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="index.html" class="active"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+        <li><a href="produtos.html"><i class="fas fa-box"></i> <span>Produtos</span></a></li>
+        <li><a href="clientes.html"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
+        <li><a href="fornecedores.html"><i class="fas fa-truck"></i> <span>Fornecedores</span></a></li>
+        <li><a href="funcionarios.html"><i class="fas fa-user-tie"></i> <span>Funcionários</span></a></li>
+        <li><a href="vendas.html"><i class="fas fa-shopping-cart"></i> <span>Vendas</span></a></li>
+        <li><a href="feedbacks.html"><i class="fas fa-comment"></i> <span>Feedbacks</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <div class="user-name" id="user-name">Admin</div>
+            <div class="user-role">Administrador</div>
+          </div>
+        </div>
+        <!-- Botão de alternância de tema -->
+        <button id="theme-toggle" class="theme-toggle">
+          <i class="fas fa-moon"></i>
+          <span>Modo Escuro</span>
+        </button>
+        <button id="logout-btn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="content-header">
+        <h1 class="content-title">Dashboard</h1>
+        <div class="content-actions">
+          <div class="date-filter">
+            <select id="period-filter">
+              <option value="today">Hoje</option>
+              <option value="week">Últimos 7 dias</option>
+              <option value="month" selected>Último mês</option>
+              <option value="year">Último ano</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-cards">
+        <div class="stat-card">
+          <div class="stat-icon" style="color: #44bd32;">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <div class="stat-value" id="total-vendas">0</div>
+          <div class="stat-label">Vendas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="color: #3498db;">
+            <i class="fas fa-money-bill-wave"></i>
+          </div>
+          <div class="stat-value" id="faturamento">R$ 0,00</div>
+          <div class="stat-label">Faturamento</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="color: #f39c12;">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-value" id="total-clientes">0</div>
+          <div class="stat-label">Clientes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="color: #e74c3c;">
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="stat-value" id="media-feedback">0.0</div>
+          <div class="stat-label">Média de Feedback</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="card">
+          <h3>Vendas Recentes</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Data</th>
+                  <th>Cliente</th>
+                  <th>Valor</th>
+                  <th>Forma de Pagamento</th>
+                </tr>
+              </thead>
+              <tbody id="vendas-recentes">
+                <tr>
+                  <td colspan="5" class="text-center">Carregando...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="card">
+          <h3>Faturamento vs. Lucro Mensal</h3>
+          <div class="chart-container" id="chart-faturamento">
+            <canvas id="faturamento-chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="card">
+          <h3>Produtos Mais Vendidos</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Quantidade</th>
+                  <th>Valor Total</th>
+                </tr>
+              </thead>
+              <tbody id="produtos-mais-vendidos">
+                <tr>
+                  <td colspan="3" class="text-center">Carregando...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="card">
+          <h3>Funcionários Recentes</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Cargo</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-funcionarios">
+                <tr>
+                  <td colspan="3" class="text-center">Carregando...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carregando scripts Javascript -->
+  <script src="../js/config.js"></script>
+  <script src="../js/admin/auth.js"></script>
+  <script src="../js/admin/dashboard.js"></script>
+  <script src="../js/admin/theme.js"></script>
+</body>
+</html>

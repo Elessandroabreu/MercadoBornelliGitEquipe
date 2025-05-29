@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Totem de Autoatendimento - Mercado Bornelli</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/totem.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Totem de Autoatendimento</h1>
+      <div class="header-controls">
+        <button id="theme-toggle" class="theme-toggle" title="Alternar tema">
+          <i class="fas fa-moon"></i>
+          <span class="sr-only">Modo Escuro</span>
+        </button>
+        <a href="index.html" class="btn btn-secondary">Voltar</a>
+      </div>
+    </header>
+
+    <main>
+      <div id="welcome-screen" class="screen">
+        <h2>Bem-vindo ao Mercado Bornelli</h2>
+        <p>Você já é cliente cadastrado?</p>
+        <div class="buttons">
+          <button id="btn-cliente-sim" class="btn btn-primary">Sim, já sou cliente</button>
+          <button id="btn-cliente-nao" class="btn btn-secondary">Não, continuar sem identificação</button>
+        </div>
+      </div>
+
+      <div id="login-screen" class="screen hidden">
+        <h2>Identificação de Cliente</h2>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="cpf">CPF</label>
+            <input type="text" id="cpf" placeholder="000.000.000-00" required>
+            <div id="cpf-error-message" class="error-message hidden" aria-live="polite"></div>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="btn btn-primary">Continuar</button>
+            <button type="button" id="btn-voltar-welcome" class="btn btn-secondary">Voltar</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="shopping-screen" class="screen hidden">
+        <div class="shopping-header">
+          <div class="client-info hidden" id="client-info">
+            <p>Cliente: <span id="client-name"></span></p>
+          </div>
+        </div>
+
+        <div class="scanner-section">
+          <div class="barcode-image">
+            <img src="img/barras.jpg" alt="Exemplo de código de barras" class="barcode-example">
+            <p>Posicione o código de barras do produto no scanner ou digite o código abaixo</p>
+          </div>
+
+          <div class="manual-input-section">
+            <form id="barcode-form">
+              <div class="input-group">
+                <input type="text" id="barcode-input" placeholder="Digite o código de barras" class="form-control">
+                <button type="submit" class="btn btn-primary">Adicionar</button>
+              </div>
+            </form>
+            <div id="barcode-error" class="error-message hidden">Produto não encontrado. Verifique o código e tente
+              novamente.</div>
+          </div>
+        </div>
+        <h2>Seus Produtos</h2>
+        <div class="cart-section">
+          <div class="cart-header">
+            <h3>Carrinho</h3>
+            <p id="cart-count">0 itens</p>
+          </div>
+          <div class="cart-items" id="cart-items">
+            <p id="empty-cart-message">Seu carrinho está vazio. Escaneie produtos para adicionar.</p>
+          </div>
+          <div class="cart-total">
+            <p>Total: R$ <span id="cart-total">0.00</span></p>
+          </div>
+          <button id="btn-finalizar" class="btn btn-success" disabled>Finalizar Compra</button>
+        </div>
+      </div>
+
+      <div id="payment-screen" class="screen hidden">
+        <h2>Escolha a forma de pagamento</h2>
+        <div class="payment-options">
+          <button class="payment-option" data-method="PIX">
+            <i class="fas fa-qrcode"></i>
+            <span>PIX</span>
+          </button>
+          <button class="payment-option" data-method="CREDITO">
+            <i class="fas fa-credit-card"></i>
+            <span>Crédito</span>
+          </button>
+          <button class="payment-option" data-method="DEBITO">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>Débito</span>
+          </button>
+        </div>
+        <button id="btn-voltar-shopping" class="btn btn-secondary">Voltar para compras</button>
+      </div>
+
+      <div id="processing-screen" class="screen hidden">
+        <div class="loading-animation">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+        <h2>Processando pagamento</h2>
+        <p>Por favor, aguarde um momento...</p>
+      </div>
+
+      <div id="success-screen" class="screen hidden">
+        <div class="success-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h2>Pagamento aprovado!</h2>
+        <p>Sua compra foi realizada com sucesso.</p>
+        <div class="receipt-container">
+          <button id="btn-view-receipt" class="btn btn-secondary">
+            <i class="fas fa-receipt"></i> Ver comprovante
+          </button>
+        </div>
+        <button id="btn-feedback" class="btn btn-primary">Deixar feedback</button>
+      </div>
+
+      <div id="feedback-screen" class="screen hidden">
+        <h2>Como foi sua experiência?</h2>
+        <div class="rating">
+          <i class="fas fa-star" data-rating="1"></i>
+          <i class="fas fa-star" data-rating="2"></i>
+          <i class="fas fa-star" data-rating="3"></i>
+          <i class="fas fa-star" data-rating="4"></i>
+          <i class="fas fa-star" data-rating="5"></i>
+        </div>
+        <div class="feedback-form">
+          <select id="feedback-type">
+            <option value="">Selecione o tipo de feedback</option>
+            <option value="ELOGIO">Elogio</option>
+            <option value="SUGESTAO">Sugestão</option>
+            <option value="RECLAMACAO">Reclamação</option>
+          </select>
+          <textarea id="feedback-comment" placeholder="Deixe seu comentário (opcional)"></textarea>
+        </div>
+        <div class="buttons center-button">
+          <button id="btn-submit-feedback" class="btn btn-primary" disabled>Enviar feedback</button>
+        </div>
+      </div>
+
+      <div id="receipt-modal" class="modal hidden">
+        <div class="modal-content">
+         
+          <h3>Comprovante de Compra</h3>
+          <div id="receipt-content"></div>
+        
+        </div>
+      </div>
+
+      <div id="error-screen" class="screen hidden">
+        <div class="error-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h2>Ocorreu um erro</h2>
+        <p id="error-message"></p>
+        <button id="btn-try-again" class="btn btn-primary">Tentar novamente</button>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2025 Mercado Bornelli</p>
+    </footer>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/scanner.js"></script>
+  <script src="js/totem.js"></script>
+  <script src="js/theme.js"></script>
+</body>
+
+</html>

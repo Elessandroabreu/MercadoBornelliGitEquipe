@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Preço - Mercado Bornelli</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/consulta.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+ <div class="container">
+  <header>
+    <h1>Consulta de Preço</h1>
+    <div class="header-controls">
+      <button id="theme-toggle" class="theme-toggle" title="Alternar tema">
+        <i class="fas fa-moon"></i>
+        <span class="sr-only">Modo Escuro</span>
+      </button>
+      <a href="index.html" class="btn btn-secondary">Voltar</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="manual-entry-container">
+      <h2>Digite o código de barras do produto</h2>
+      <form id="barcode-form" class="barcode-input-form">
+        <input type="text" id="barcode-input" class="barcode-input" placeholder="Digite o código de barras aqui" required>
+        <button type="submit" class="btn btn-primary">Consultar Preço</button>
+      </form>
+    </div>
+
+    <div id="result-container" class="result-container hidden">
+      <div class="product-info">
+        <h2 id="product-name"></h2>
+        <div class="product-details">
+          <p class="product-category" id="product-category"></p>
+          <p class="product-price" id="product-price"></p>
+        </div>
+      </div>
+      <button id="scan-again" class="btn btn-primary">Consultar outro produto</button>
+    </div>
+
+    <div id="error-container" class="error-container hidden">
+      <p id="error-message"></p>
+      <button id="try-again" class="btn btn-primary">Tentar novamente</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Mercado Bornelli</p>
+  </footer>
+</div>
+
+  <script src="js/config.js"></script>
+  <script src="js/scanner.js"></script>
+  <script src="js/consulta.js"></script>
+  <script src="js/theme.js"></script>
+</body>
+</html>

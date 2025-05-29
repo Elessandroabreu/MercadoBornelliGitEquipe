@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório de Feedbacks - Mercado Bornelli</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="../js/lib/chart.min.js"></script>
+</head>
+
+<body>
+  <div class="admin-container">
+    <div id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <h2>Mercado Bornelli</h2>
+        <p>Painel Administrativo</p>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="index.html"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+        <li><a href="produtos.html"><i class="fas fa-box"></i> <span>Produtos</span></a></li>
+        <li><a href="clientes.html"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
+        <li><a href="fornecedores.html"><i class="fas fa-truck"></i> <span>Fornecedores</span></a></li>
+        <li><a href="funcionarios.html"><i class="fas fa-user-tie"></i> <span>Funcionários</span></a></li>
+        <li><a href="vendas.html"><i class="fas fa-shopping-cart"></i> <span>Vendas</span></a></li>
+        <li><a href="feedbacks.html"><i class="fas fa-comment"></i> <span>Feedbacks</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <div class="user-name" id="user-name">Admin</div>
+            <div class="user-role">Administrador</div>
+          </div>
+        </div>
+        <!-- Botão de alternância de tema -->
+        <button id="theme-toggle" class="theme-toggle">
+          <i class="fas fa-moon"></i>
+          <span>Modo Escuro</span>
+        </button>
+        <button id="logout-btn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="content-header">
+        <h1 class="content-title">Relatório de Feedbacks</h1>
+        <div class="content-actions">
+          <div>
+            <input type="date" id="data-inicio" class="date-input">
+            <span>até</span>
+            <input type="date" id="data-fim" class="date-input">
+          </div>
+
+          <button id="btn-gerar-relatorio" class="btn btn-primary">
+            Gerar Relatório
+          </button>
+        </div>
+      </div>
+
+      <div id="relatorio-container" class="hidden">
+        <div class="dashboard-cards">
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #44bd32;">
+              <i class="fas fa-comment"></i>
+            </div>
+            <div class="stat-value" id="total-feedbacks">0</div>
+            <div class="stat-label">Feedbacks</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #3498db;">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-value" id="nota-media">0.0</div>
+            <div class="stat-label">Nota Média</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #f39c12;">
+              <i class="fas fa-thumbs-up"></i>
+            </div>
+            <div class="stat-value" id="total-elogios">0</div>
+            <div class="stat-label">Elogios</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #e74c3c;">
+              <i class="fas fa-thumbs-down"></i>
+            </div>
+            <div class="stat-value" id="total-reclamacoes">0</div>
+            <div class="stat-label">Reclamações</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="card">
+            <h3>Distribuição de Notas</h3>
+            <div class="chart-container" id="chart-notas">
+              <canvas id="notas-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="card">
+            <h3>Últimos Feedbacks</h3>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>CPF</th>
+                    <th>Telefone</th>
+                    <th>Tipo</th>
+                    <th>Nota</th>
+                    <th>Comentário</th>
+                  </tr>
+                </thead>
+                <tbody id="ultimos-feedbacks">
+                  <tr>
+                    <td colspan="7" class="text-center">Nenhum feedback encontrado</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="feedbacks-container" class="card">
+        <h3>Lista de Feedbacks</h3>
+        <div class="filter-container">
+          <select id="filter-tipo">
+            <option value="">Todos os tipos</option>
+            <option value="ELOGIO">Elogios</option>
+            <option value="SUGESTAO">Sugestões</option>
+            <option value="RECLAMACAO">Reclamações</option>
+          </select>
+          <select id="filter-nota">
+            <option value="">Todas as notas</option>
+            <option value="5">5 estrelas</option>
+            <option value="4">4 estrelas</option>
+            <option value="3">3 estrelas</option>
+            <option value="2">2 estrelas</option>
+            <option value="1">1 estrela</option>
+          </select>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Data</th>
+                <th>Cliente</th>
+                <th>CPF</th>
+                <th>Telefone</th>
+                <th>Tipo</th>
+                <th>Nota</th>
+                <th>Comentário</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="feedbacks-lista">
+              <tr>
+                <td colspan="9" class="text-center">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination">
+          <!-- Paginação será inserida via JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Detalhes do Feedback -->
+  <div id="feedback-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Detalhes do Feedback</h2>
+        <button class="close-modal" id="feedback-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="feedback-info">
+          <p><strong>ID:</strong> <span id="feedback-id"></span></p>
+          <p><strong>Data:</strong> <span id="feedback-data"></span></p>
+          <p><strong>Cliente:</strong> <span id="feedback-cliente"></span></p>
+          <p><strong>Tipo:</strong> <span id="feedback-tipo"></span></p>
+          <p><strong>Nota:</strong> <span id="feedback-nota"></span></p>
+          <p><strong>Comentário:</strong></p>
+          <div class="feedback-comentario" id="feedback-comentario"></div>
+        </div>
+
+        <div id="venda-section">
+          <h3>Venda Relacionada</h3>
+          <p><strong>Venda ID:</strong> <span id="venda-id"></span></p>
+          <p><strong>Data da Venda:</strong> <span id="venda-data"></span></p>
+          <p><strong>Valor Total:</strong> <span id="venda-total"></span></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-excluir-feedback" class="btn btn-danger">Excluir Feedback</button>
+        <button class="btn btn-secondary" id="btn-fechar-feedback">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação -->
+  <div id="confirm-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirmação</h2>
+        <button class="close-modal" id="confirm-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-message">Tem certeza que deseja realizar esta ação?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-confirm">Cancelar</button>
+        <button class="btn btn-danger" id="btn-confirm">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/admin/auth.js"></script>
+  <script src="../js/admin/feedbacks.js"></script>
+  <script src="../js/admin/theme.js"></script>
+</body>
+
+</html>

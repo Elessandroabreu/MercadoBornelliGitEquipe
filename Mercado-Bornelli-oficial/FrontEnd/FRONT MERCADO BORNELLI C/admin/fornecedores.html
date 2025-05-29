@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciamento de Fornecedores - Mercado Bornelli</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="admin-container">
+    <div id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <h2>Mercado Bornelli</h2>
+        <p>Painel Administrativo</p>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="index.html"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+        <li><a href="produtos.html"><i class="fas fa-box"></i> <span>Produtos</span></a></li>
+        <li><a href="clientes.html"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
+        <li><a href="fornecedores.html"><i class="fas fa-truck"></i> <span>Fornecedores</span></a></li>
+        <li><a href="funcionarios.html"><i class="fas fa-user-tie"></i> <span>Funcionários</span></a></li>
+        <li><a href="vendas.html"><i class="fas fa-shopping-cart"></i> <span>Vendas</span></a></li>
+        <li><a href="feedbacks.html"><i class="fas fa-comment"></i> <span>Feedbacks</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <div class="user-name" id="user-name">Admin</div>
+            <div class="user-role">Administrador</div>
+          </div>
+        </div>
+          <!-- Botão de alternância de tema -->
+  <button id="theme-toggle" class="theme-toggle">
+    <i class="fas fa-moon"></i>
+    <span>Modo Escuro</span>
+  </button>
+        <button id="logout-btn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="content-header">
+        <h1 class="content-title">Gerenciamento de Fornecedores</h1>
+        <div class="content-actions">
+          <button id="btn-novo-fornecedor" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Novo Fornecedor
+          </button>
+          <button id="btn-fornecedores-excluidos" class="btn btn-secondary">
+            <i class="fas fa-trash"></i> Fornecedores Excluídos
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="search-container">
+          <input type="text" id="search-input" placeholder="Buscar por nome ou CNPJ...">
+          <button id="btn-search" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome da Empresa</th>
+                <th>CNPJ</th>
+                <th>Representante</th>
+                <th>Telefone</th>
+                <th>Email</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="fornecedores-lista">
+              <tr>
+                <td colspan="7" class="text-center">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination">
+          <!-- Paginação será inserida via JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Fornecedor -->
+  <div id="fornecedor-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="fornecedor-modal-title">Novo Fornecedor</h2>
+        <button class="close-modal" id="fornecedor-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="fornecedor-form">
+          <input type="hidden" id="fornecedor-id">
+
+          <div class="form-group">
+            <label for="fornecedor-nome">Nome da Empresa</label>
+            <input type="text" id="fornecedor-nome" required>
+          </div>
+
+          <div class="form-group">
+            <label for="fornecedor-cnpj">CNPJ</label>
+            <input type="text" id="fornecedor-cnpj" placeholder="00.000.000/0000-00" required>
+          </div>
+
+          <div class="form-group">
+            <label for="fornecedor-representante">Nome do Representante</label>
+            <input type="text" id="fornecedor-representante">
+          </div>
+
+          <div class="form-group">
+            <label for="fornecedor-telefone">Telefone</label>
+            <input type="text" id="fornecedor-telefone" placeholder="(00) 00000-0000">
+          </div>
+
+          <div class="form-group">
+            <label for="fornecedor-email">Email</label>
+            <input type="email" id="fornecedor-email">
+          </div>
+
+          <div class="form-group">
+            <label for="fornecedor-produtos">Produtos Fornecidos</label>
+            <textarea id="fornecedor-produtos" rows="3"></textarea>
+            <small>Descreva os tipos de produtos fornecidos, separados por vírgula.</small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancelar">Cancelar</button>
+        <button class="btn btn-primary" id="btn-salvar">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Produtos do Fornecedor -->
+  <div id="produtos-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Produtos do Fornecedor</h2>
+        <button class="close-modal" id="produtos-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Fornecedor: <strong id="produtos-fornecedor-nome"></strong></p>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Código de Barras</th>
+                <th>Categoria</th>
+                <th>Preço de Compra</th>
+              </tr>
+            </thead>
+            <tbody id="produtos-lista">
+              <tr>
+                <td colspan="5" class="text-center">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-fechar-produtos">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação -->
+  <div id="confirm-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirmação</h2>
+        <button class="close-modal" id="confirm-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-message">Tem certeza que deseja realizar esta ação?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-confirm">Cancelar</button>
+        <button class="btn btn-danger" id="btn-confirm">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/admin/auth.js"></script>
+  <script src="../js/admin/fornecedores.js"></script>
+  <script src="../js/admin/theme.js"></script>
+</body>
+
+</html>

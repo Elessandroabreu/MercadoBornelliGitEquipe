@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciamento de Funcionários - Mercado Bornelli</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="admin-container">
+    <div id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <h2>Mercado Bornelli</h2>
+        <p>Painel Administrativo</p>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="index.html"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+        <li><a href="produtos.html"><i class="fas fa-box"></i> <span>Produtos</span></a></li>
+        <li><a href="clientes.html"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
+        <li><a href="fornecedores.html"><i class="fas fa-truck"></i> <span>Fornecedores</span></a></li>
+        <li><a href="funcionarios.html"><i class="fas fa-user-tie"></i> <span>Funcionários</span></a></li>
+        <li><a href="vendas.html"><i class="fas fa-shopping-cart"></i> <span>Vendas</span></a></li>
+        <li><a href="feedbacks.html"><i class="fas fa-comment"></i> <span>Feedbacks</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <div class="user-name" id="user-name">Admin</div>
+            <div class="user-role">Administrador</div>
+          </div>
+        </div>
+          <!-- Botão de alternância de tema -->
+  <button id="theme-toggle" class="theme-toggle">
+    <i class="fas fa-moon"></i>
+    <span>Modo Escuro</span>
+  </button>
+        <button id="logout-btn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="content-header">
+        <h1 class="content-title">Gerenciamento de Funcionários</h1>
+        <div class="content-actions">
+          <button id="btn-novo-funcionario" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Novo Funcionário
+          </button>
+          <button id="btn-funcionarios-excluidos" class="btn btn-secondary">
+            <i class="fas fa-trash"></i> Funcionários Excluídos
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="search-container">
+          <input type="text" id="search-input" placeholder="Buscar por nome ou CPF...">
+          <button id="btn-search" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <div class="filter-container">
+          <select id="filter-cargo">
+            <option value="">Todos os cargos</option>
+            <option value="GERENTE">Gerente</option>
+            <option value="ATENDENTE">Atendente</option>
+            <option value="CAIXA">Caixa</option>
+            <option value="ESTOQUISTA">Estoquista</option>
+            <option value="ADMIN">Administrador</option>
+          </select>
+          <select id="filter-status">
+            <option value="">Todos os status</option>
+            <option value="ATIVO">Ativo</option>
+            <option value="FERIAS">Férias</option>
+            <option value="LICENCA">Licença</option>
+          </select>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Cargo</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="funcionarios-lista">
+              <tr>
+                <td colspan="8" class="text-center">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination">
+          <!-- Paginação será inserida via JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Funcionário -->
+  <div id="funcionario-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="funcionario-modal-title">Novo Funcionário</h2>
+        <button class="close-modal" id="funcionario-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="funcionario-form">
+          <input type="hidden" id="funcionario-id">
+
+          <div class="form-group">
+            <label for="funcionario-nome">Nome Completo</label>
+            <input type="text" id="funcionario-nome" required>
+          </div>
+
+          <div class="form-group">
+            <label for="funcionario-cpf">CPF</label>
+            <input type="text" id="funcionario-cpf" placeholder="000.000.000-00" required>
+          </div>
+
+          <div class="form-group">
+            <label for="funcionario-email">Email</label>
+            <input type="email" id="funcionario-email">
+          </div>
+
+          <div class="form-group">
+            <label for="funcionario-telefone">Telefone</label>
+            <input type="text" id="funcionario-telefone" placeholder="(00) 00000-0000">
+          </div>
+
+          <div class="form-group">
+            <label for="funcionario-cargo">Cargo</label>
+            <select id="funcionario-cargo" required>
+              <option value="">Selecione um cargo</option>
+              <option value="GERENTE">Gerente</option>
+              <option value="ATENDENTE">Atendente</option>
+              <option value="CAIXA">Caixa</option>
+              <option value="ESTOQUISTA">Estoquista</option>
+              <option value="ADMIN">Administrador</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="funcionario-status">Status</label>
+            <select id="funcionario-status" required>
+              <option value="ATIVO">Ativo</option>
+              <option value="FERIAS">Férias</option>
+              <option value="LICENCA">Licença</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="funcionario-data-admissao">Data de Admissão</label>
+            <input type="date" id="funcionario-data-admissao" required>
+          </div>
+
+          <div class="form-group">
+            <label for="funcionario-salario">Salário (R$)</label>
+            <input type="number" id="funcionario-salario" min="0" step="0.01" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancelar">Cancelar</button>
+        <button class="btn btn-primary" id="btn-salvar">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação -->
+  <div id="confirm-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirmação</h2>
+        <button class="close-modal" id="confirm-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-message">Tem certeza que deseja realizar esta ação?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-confirm">Cancelar</button>
+        <button class="btn btn-danger" id="btn-confirm">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/admin/auth.js"></script>
+  <script src="../js/admin/funcionarios.js"></script>
+  <script src="../js/admin/theme.js"></script>
+</body>
+
+</html>

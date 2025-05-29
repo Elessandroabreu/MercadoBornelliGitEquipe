@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório de Vendas - Mercado Bornelli</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="admin-container">
+    <div id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <h2>Mercado Bornelli</h2>
+        <p>Painel Administrativo</p>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="index.html"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+        <li><a href="produtos.html"><i class="fas fa-box"></i> <span>Produtos</span></a></li>
+        <li><a href="clientes.html"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
+        <li><a href="fornecedores.html"><i class="fas fa-truck"></i> <span>Fornecedores</span></a></li>
+        <li><a href="funcionarios.html"><i class="fas fa-user-tie"></i> <span>Funcionários</span></a></li>
+        <li><a href="vendas.html"><i class="fas fa-shopping-cart"></i> <span>Vendas</span></a></li>
+        <li><a href="feedbacks.html"><i class="fas fa-comment"></i> <span>Feedbacks</span></a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <div class="user-name" id="user-name">Admin</div>
+            <div class="user-role">Administrador</div>
+          </div>
+        </div>
+        <!-- Botão de alternância de tema -->
+        <button id="theme-toggle" class="theme-toggle">
+          <i class="fas fa-moon"></i>
+          <span>Modo Escuro</span>
+        </button>
+        <button id="logout-btn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="content-header">
+        <h1 class="content-title">Relatório de Vendas</h1>
+        <div class="content-actions">
+          <select id="relatorio-tipo">
+            <option value="personalizado" selected>Personalizado</option>
+            <option value="mensal">Mensal</option>
+            <option value="anual">Anual</option>
+          </select>
+
+          <div id="filtro-personalizado">
+            <input type="date" id="data-inicio" class="date-input">
+            <span>até</span>
+            <input type="date" id="data-fim" class="date-input">
+          </div>
+
+          <div id="filtro-mensal" class="hidden">
+            <select id="mes">
+              <option value="1">Janeiro</option>
+              <option value="2">Fevereiro</option>
+              <option value="3">Março</option>
+              <option value="4">Abril</option>
+              <option value="5">Maio</option>
+              <option value="6">Junho</option>
+              <option value="7">Julho</option>
+              <option value="8">Agosto</option>
+              <option value="9">Setembro</option>
+              <option value="10">Outubro</option>
+              <option value="11">Novembro</option>
+              <option value="12">Dezembro</option>
+            </select>
+            <select id="ano-mensal">
+              <!-- Anos serão preenchidos via JavaScript -->
+            </select>
+          </div>
+
+          <div id="filtro-anual" class="hidden">
+            <select id="ano">
+              <!-- Anos serão preenchidos via JavaScript -->
+            </select>
+          </div>
+
+          <button id="btn-gerar-relatorio" class="btn btn-primary">
+            Gerar Relatório
+          </button>
+        </div>
+      </div>
+
+      <div id="relatorio-container" class="hidden">
+        <div class="dashboard-cards">
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #44bd32;">
+              <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="stat-value" id="total-vendas">0</div>
+            <div class="stat-label">Vendas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #3498db;">
+              <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <div class="stat-value" id="faturamento">R$ 0,00</div>
+            <div class="stat-label">Faturamento</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #f39c12;">
+              <i class="fas fa-box"></i>
+            </div>
+            <div class="stat-value" id="total-produtos">0</div>
+            <div class="stat-label">Produtos Vendidos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #e74c3c;">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-value" id="lucro">R$ 0,00</div>
+            <div class="stat-label">Lucro</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="card">
+            <h3>Formas de Pagamento</h3>
+            <div class="chart-container" id="chart-pagamentos">
+              <canvas id="pagamentos-chart" width="600" height="400" style="width: 600px; height: 400px;"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="card">
+            <h3>Produtos Mais Vendidos</h3>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Valor Total</th>
+                  </tr>
+                </thead>
+                <tbody id="produtos-mais-vendidos">
+                  <tr>
+                    <td colspan="3" class="text-center">Nenhum dado disponível</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="vendas-container" class="card">
+        <h3>Lista de Vendas</h3>
+        <div class="search-container">
+          <input type="text" id="search-input" placeholder="Buscar por cliente...">
+          <button id="btn-search" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Data/Hora</th>
+                <th>Cliente</th>
+                <th>Valor Total</th>
+                <th>Forma de Pagamento</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="vendas-lista">
+              <tr>
+                <td colspan="6" class="text-center">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination">
+          <!-- Paginação será inserida via JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Detalhes da Venda -->
+  <div id="venda-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Detalhes da Venda</h2>
+        <button class="close-modal" id="venda-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="venda-info">
+          <p><strong>Venda #</strong> <span id="venda-id"></span></p>
+          <p><strong>Data/Hora:</strong> <span id="venda-data"></span></p>
+          <p><strong>Cliente:</strong> <span id="venda-cliente"></span></p>
+          <p><strong>Forma de Pagamento:</strong> <span id="venda-pagamento"></span></p>
+        </div>
+
+        <h3>Itens da Venda</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody id="itens-lista">
+              <tr>
+                <td colspan="4" class="text-center">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="venda-total">
+          <p><strong>Total:</strong> <span id="venda-total">R$ 0,00</span></p>
+        </div>
+
+        <div id="feedback-section" class="hidden">
+          <h3>Feedback do Cliente</h3>
+          <div class="feedback-info">
+            <p><strong>Nota:</strong> <span id="feedback-nota"></span></p>
+            <p><strong>Tipo:</strong> <span id="feedback-tipo"></span></p>
+            <p><strong>Comentário:</strong> <span id="feedback-comentario"></span></p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-cancelar-venda" class="btn btn-danger">Cancelar Venda</button>
+        <button class="btn btn-secondary" id="btn-fechar-venda">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação -->
+  <div id="confirm-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirmação</h2>
+        <button class="close-modal" id="confirm-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-message">Tem certeza que deseja realizar esta ação?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-confirm">Cancelar</button>
+        <button class="btn btn-danger" id="btn-confirm">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/admin/auth.js"></script>
+  <script src="../js/admin/vendas.js"></script>
+  <script src="../js/admin/theme.js"></script>
+</body>
+
+</html>
