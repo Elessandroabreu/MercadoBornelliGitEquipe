@@ -2,6 +2,6 @@
   "liveServer.settings.proxy": {
     "enable": true,
     "baseUri": "/api",
-    "proxyUri": "http://localhost:8082/api"
+    "proxyUri": "http://localhost:8080/api"
   }
 }
