@@ -22,7 +22,7 @@
 }
 
 /* Melhorar responsividade em telas pequenas */
-@media (max-width: 768px) {
+@media (max-width: 790px) {
   .chart-container {
     height: 350px; /* Menor altura em telas pequenas */
     padding: 10px;
