@@ -1,9 +1,4 @@
-/* admin.css - Versão Completa e Moderna */
 
-/* =============================================
-   VARIÁVEIS E DEFINIÇÕES DE TEMA
-============================================= */
-/* Estilos para gráficos em tela cheia */
 .chart-container {
   position: relative;
   height: 450px; /* Altura maior para melhor visualização */
