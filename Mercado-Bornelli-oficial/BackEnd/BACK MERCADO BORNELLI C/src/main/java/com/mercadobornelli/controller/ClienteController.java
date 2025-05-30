@@ -143,4 +143,5 @@ public class ClienteController {
         List<AcessoClienteDTO> acessos = clienteService.listarAcessos(id);
         return ResponseEntity.ok(acessos);
     }
+
 }
