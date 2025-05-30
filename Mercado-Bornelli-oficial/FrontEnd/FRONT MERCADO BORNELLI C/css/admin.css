@@ -1,8 +1,8 @@
 
 .chart-container {
   position: relative;
-  height: 450px; /* Altura maior para melhor visualização */
-  width: 100% !important; /* Largura total */
+  height: 450px; 
+  width: 100% !important;
   max-width: 100% !important; /* Sem limitação de largura máxima */
   margin: 0 auto;
   padding: 15px;
